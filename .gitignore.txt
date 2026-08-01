@@ -1,0 +1,36 @@
+# Executables
+*.exe
+*.out
+
+# Object files
+*.o
+*.obj
+
+# Static libraries
+*.a
+*.lib
+
+# Dynamic libraries
+*.dll
+
+# Visual Studio
+.vs/
+*.vcxproj.user
+
+# VS Code
+.vscode/
+
+# CMake
+build/
+cmake-build-*/
+
+# Debug files
+*.pdb
+
+# Temporary files
+*.tmp
+*.log
+
+# Windows
+Thumbs.db
+Desktop.ini
