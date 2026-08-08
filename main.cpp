@@ -7,6 +7,7 @@ int main(){
 
     if(started == true){
         std::cout<<"Server started successfully."<<std::endl;
+        server.run();
     }else{
         std::cout<<"Server failed to start."<<std::endl;
     }

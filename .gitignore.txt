@@ -34,3 +34,6 @@ cmake-build-*/
 # Windows
 Thumbs.db
 Desktop.ini
+
+# Temporary test client
+test_client.cpp

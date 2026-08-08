@@ -1,6 +1,7 @@
 #pragma once
 
 #include<winsock2.h>
+#include<vector>
 
 class Server{
     private: 
@@ -8,6 +9,7 @@ class Server{
         SOCKET listenSocket;
         sockaddr_in serverAddr;
         int port;
+        std::vector<SOCKET> clients;
         
     private:
         bool initializeWinsock();
@@ -18,7 +20,10 @@ class Server{
 
         bool startListening();
 
+        bool acceptConnection();
+
     public:
         Server(int port);
         bool startServer();
+        bool run();
 };

@@ -35,6 +35,16 @@ bool Server::startListening(){
     return true;
 }
 
+bool Server::acceptConnection(){
+    sockaddr_in clientAddr;
+    int clientAddrSize = sizeof(clientAddr);
+    SOCKET clientSocket;
+    clientSocket = accept(listenSocket,(SOCKADDR *) &clientAddr, &clientAddrSize);
+    if(clientSocket == INVALID_SOCKET) return false;
+    clients.push_back(clientSocket);
+    return true;
+}
+
 bool Server::startServer(){
     if(!initializeWinsock()){
         std::cerr<<"WSAStartup failed!\n";
@@ -57,4 +67,12 @@ bool Server::startServer(){
     }
 
     return true;
+}
+
+bool Server::run(){
+    while(true){
+        if(!acceptConnection()){
+            return false;
+        }
+    }
 }
