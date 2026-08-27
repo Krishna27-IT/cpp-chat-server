@@ -2,6 +2,7 @@
 
 #include<winsock2.h>
 #include<vector>
+#include <string>
 
 class Server{
     private: 
@@ -28,4 +29,5 @@ class Server{
         bool run();
         void showClientCount();
         bool receiveMessage(SOCKET clientSocket);
+        bool sendMessage(SOCKET ClientSocket, const std::string& message);
 };

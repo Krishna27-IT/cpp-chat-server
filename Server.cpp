@@ -1,6 +1,7 @@
 #include "Server.h"
 #include <iostream>
 #include <ws2tcpip.h>
+#include <cstring>
 
 Server::Server(int port){
     this->port = port;
@@ -31,7 +32,7 @@ bool Server::bindSocket(){
 }
 
 bool Server::startListening(){
-    if(listen(listenSocket,SOMAXCONN) == SOCKET_ERROR) return false;
+    if(listen(listenSocket,SOMAXCONN) == SOCKET_ERROR) return INVALID_SOCKET;
     return true;
 }
 
@@ -76,6 +77,7 @@ bool Server::run(){
         }
         clients.push_back(clientSocket);
         receiveMessage(clientSocket);
+        sendMessage(clientSocket, "Welcome to Server!");
         showClientCount();
     }
 }
@@ -93,10 +95,20 @@ bool Server::receiveMessage(SOCKET clientSocket){
         std::cout<<"Message: "<<buffer<<'\n';
         return true;
     }else if(bytesReceived == 0){
-        std::cout<<"Connection Closed"<<std::endl;
+        std::cout<<"Connection Closed!"<<std::endl;
         return false;
     }else{
-        std::cout<<"recv Failed"<<WSAGetLastError()<<std::endl;
+        std::cout<<"recv Failed: "<<WSAGetLastError()<<std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+bool Server::sendMessage(SOCKET clientSocket, const std::string& message){
+    int bytesSent = send(clientSocket, message.c_str(), message.length(),0);
+
+    if(bytesSent == SOCKET_ERROR){
         return false;
     }
 
