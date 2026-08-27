@@ -35,14 +35,13 @@ bool Server::startListening(){
     return true;
 }
 
-bool Server::acceptConnection(){
+SOCKET Server::acceptConnection(){
     sockaddr_in clientAddr;
     int clientAddrSize = sizeof(clientAddr);
     SOCKET clientSocket;
     clientSocket = accept(listenSocket,(SOCKADDR *) &clientAddr, &clientAddrSize);
     if(clientSocket == INVALID_SOCKET) return false;
-    clients.push_back(clientSocket);
-    return true;
+    return clientSocket;
 }
 
 bool Server::startServer(){
@@ -71,8 +70,35 @@ bool Server::startServer(){
 
 bool Server::run(){
     while(true){
-        if(!acceptConnection()){
+        SOCKET clientSocket = acceptConnection();
+        if(clientSocket == INVALID_SOCKET){
             return false;
         }
+        clients.push_back(clientSocket);
+        receiveMessage(clientSocket);
+        showClientCount();
     }
+}
+
+void Server::showClientCount(){
+    std::cout << "Connected clients: " << clients.size() << '\n';
+}
+
+bool Server::receiveMessage(SOCKET clientSocket){
+    char buffer[1024];
+    int bytesReceived = recv(clientSocket,buffer,sizeof(buffer)-1,0);
+
+    if(bytesReceived > 0){
+        buffer[bytesReceived] = '\0';
+        std::cout<<"Message: "<<buffer<<'\n';
+        return true;
+    }else if(bytesReceived == 0){
+        std::cout<<"Connection Closed"<<std::endl;
+        return false;
+    }else{
+        std::cout<<"recv Failed"<<WSAGetLastError()<<std::endl;
+        return false;
+    }
+
+    return true;
 }

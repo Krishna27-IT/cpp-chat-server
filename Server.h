@@ -20,10 +20,12 @@ class Server{
 
         bool startListening();
 
-        bool acceptConnection();
+        SOCKET acceptConnection();
 
     public:
         Server(int port);
         bool startServer();
         bool run();
+        void showClientCount();
+        bool receiveMessage(SOCKET clientSocket);
 };
