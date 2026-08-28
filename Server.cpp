@@ -75,10 +75,12 @@ bool Server::run(){
         if(clientSocket == INVALID_SOCKET){
             return false;
         }
+
         clients.push_back(clientSocket);
-        receiveMessage(clientSocket);
-        sendMessage(clientSocket, "Welcome to Server!");
         showClientCount();
+
+        std::thread clientThread(&Server::handleClient,this,clientSocket);
+        clientThread.detach();
     }
 }
 
@@ -113,4 +115,9 @@ bool Server::sendMessage(SOCKET clientSocket, const std::string& message){
     }
 
     return true;
+}
+
+void Server::handleClient(SOCKET clientSocket){
+    receiveMessage(clientSocket);
+    sendMessage(clientSocket, "Welcome to Server!");
 }
